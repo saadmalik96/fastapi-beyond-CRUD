@@ -29,8 +29,6 @@ class ReviewService:
                 email=user_email, session=session
             )
             review_data_dict = review_data.model_dump()
-            new_review = Review(**review_data_dict)
-
             if not book:
                 raise HTTPException(
                     detail="Book not found", status_code=status.HTTP_404_NOT_FOUND
@@ -38,12 +36,10 @@ class ReviewService:
 
             if not user:
                 raise HTTPException(
-                    detail="Book not found", status_code=status.HTTP_404_NOT_FOUND
+                    detail="User not found", status_code=status.HTTP_404_NOT_FOUND
                 )
 
-            new_review.user = user
-
-            new_review.book = book
+            new_review = Review(**review_data_dict, user=user, book=book)
 
             session.add(new_review)
 
@@ -54,7 +50,7 @@ class ReviewService:
         except Exception as e:
             logging.exception(e)
             raise HTTPException(
-                detail="Oops... somethig went wrong!",
+                detail="Oops... something went wrong!",
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -79,12 +75,13 @@ class ReviewService:
 
         review = await self.get_review(review_uid, session)
 
-        if not review or (review.user is not user):
+        if not review or (review.user != user):
             raise HTTPException(
                 detail="Cannot delete this review",
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
-        session.add(review)
+        session.delete(review)
 
         await session.commit()
+
