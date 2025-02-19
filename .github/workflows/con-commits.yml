@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ PR Passed Conventional Commits Check"
           body: "Your PR has passed the commit message validation."
-          to: ${{ secrets.TO_EMAIL }}
+          to: sparacha@dons.usfca.edu
           from: "GitHub Actions Bot"
 
       - name: Send Email Notification on Failure
@@ -67,5 +67,5 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨 PR Failed Conventional Commits Check"
           body: "Your PR has been closed due to invalid commit messages. Please use the Conventional Commits format and try again."
-          to: ${{ secrets.TO_EMAIL }}
+          to: sparacha@dons.usfca.edu
           from: "GitHub Actions Bot"
