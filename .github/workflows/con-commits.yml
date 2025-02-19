@@ -37,24 +37,7 @@ jobs:
               issue_number: pr_number,
               body: "🚨 PR closed because it contains invalid commit messages. Please use Conventional Commits format."
             });
-
-  notify-email:
-    needs: check-con-commits
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send Email Notification on Success
-        if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.ethereal.email
-          server_port: 587
-          username: ruben.dach1@ethereal.email
-          password: x4GjdcR2sRJSdRYn7z
-          subject: "✅ PR Passed Conventional Commits Check"
-          body: "Your PR has passed the commit message validation."
-          to: sparacha@dons.usfca.edu
-          from: "GitHub Actions Bot"
-
+        
       - name: Send Email Notification on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
