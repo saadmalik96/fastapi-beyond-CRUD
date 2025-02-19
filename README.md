@@ -1,80 +1,38 @@
-# FastAPI Beyond CRUD 
+## CI/CD Workflows
 
-This is the source code for the [FastAPI Beyond CRUD](https://youtube.com/playlist?list=PLEt8Tae2spYnHy378vMlPH--87cfeh33P&si=rl-08ktaRjcm2aIQ) course. The course focuses on FastAPI development concepts that go beyond the basic CRUD operations.
+### Conventional Commits Enforcement
 
-For more details, visit the project's [website](https://jod35.github.io/fastapi-beyond-crud-docs/site/).
+To maintain commit message consistency, a GitHub Actions workflow is set up to enforce [Conventional Commits](https://www.conventionalcommits.org/). The workflow performs the following steps:
 
-## Table of Contents
+1. **Repository Setup**  
+   - Fork the repository and configure it to run locally using `docker compose up`, ensuring all required environment variables are set.
 
-1. [Getting Started](#getting-started)
-2. [Prerequisites](#prerequisites)
-3. [Project Setup](#project-setup)
-4. [Running the Application](#running-the-application)
-5. [Running Tests](#running-tests)
-6. [Contributing](#contributing)
+2. **Email Notification Setup**  
+   - An [Ethereal Email](https://ethereal.email/) account is used to send outbound email notifications.
 
-## Getting Started
-Follow the instructions below to set up and run your FastAPI project.
+3. **GitHub Actions Workflow**  
+   - A GitHub Actions workflow checks whether a PR follows the Conventional Commits format using an existing package.
+   - If the PR adheres to the format, an email notification is sent to a predefined recipient.
+   - If the PR does not follow the format, an email notification is sent indicating failure, and the PR is automatically closed.
 
-### Prerequisites
-Ensure you have the following installed:
+### Nightly Build Workflow
 
-- Python >= 3.10
-- PostgreSQL
-- Redis
+A nightly build workflow is implemented to ensure the integrity and stability of the project. The workflow follows these steps:
 
-### Project Setup
-1. Clone the project repository:
-    ```bash
-    git clone https://github.com/jod35/fastapi-beyond-CRUD.git
-    ```
-   
-2. Navigate to the project directory:
-    ```bash
-    cd fastapi-beyond-CRUD/
-    ```
+1. **Service Setup**  
+   - Starts a **PostgreSQL** database and a **Redis** cache.
 
-3. Create and activate a virtual environment:
-    ```bash
-    python3 -m venv env
-    source env/bin/activate
-    ```
+2. **Project Setup & Testing**  
+   - Installs all required Python packages.
+   - Runs database migrations.
+   - Executes test cases to verify functionality.
+   - Troubleshoots package installations and environment variable configurations to ensure proper execution within GitHub Actions.
 
-4. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+3. **Containerization & Deployment**  
+   - Builds a **Docker image** of the project.
+   - Pushes the image to **GitHub Packages** (instead of Docker Hub, due to authentication issues with tokens).
 
-5. Set up environment variables by copying the example configuration:
-    ```bash
-    cp .env.example .env
-    ```
+4. **Failure Notification**  
+   - Any failed steps trigger an email notification using the same **Ethereal Email** setup as in the Conventional Commits workflow.
 
-6. Run database migrations to initialize the database schema:
-    ```bash
-    alembic upgrade head
-    ```
-
-7. Open a new terminal and ensure your virtual environment is active. Start the Celery worker (Linux/Unix shell):
-    ```bash
-    sh runworker.sh
-    ```
-
-## Running the Application
-Start the application:
-
-```bash
-fastapi dev src/
-```
-Alternatively, you can run the application using Docker:
-```bash
-docker compose up -d
-```
-## Running Tests
-Run the tests using this command
-```bash
-pytest
-```
-
-## Contributing
-I welcome contributions to improve the documentation! You can contribute [here](https://github.com/jod35/fastapi-beyond-crud-docs).
+These workflows help automate code quality checks, maintain commit message consistency, and ensure the project is continuously tested and built.
