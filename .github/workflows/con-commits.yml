@@ -44,8 +44,8 @@ jobs:
         with:
           server_address: smtp.ethereal.email
           server_port: 587
-          username: ruben.dach1@ethereal.email
-          password: x4GjdcR2sRJSdRYn7z
+          username: audrey.kovacek@ethereal.email
+          password: vPz8NUCeU5r4GjdpJ5
           subject: "🚨 PR Failed Conventional Commits Check"
           body: "Your PR has been closed due to invalid commit messages. Please use the Conventional Commits format and try again."
           to: sparacha@dons.usfca.edu
